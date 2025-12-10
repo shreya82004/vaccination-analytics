@@ -1,10 +1,9 @@
 import os
 from dotenv import load_dotenv
+from urllib.parse import quote_plus
 
-# Load environment variables
 load_dotenv()
 
-# Database configuration
 DB_CONFIG = {
     'type': os.getenv('DB_TYPE', 'postgresql'),
     'host': os.getenv('DB_HOST', 'localhost'),
@@ -15,6 +14,6 @@ DB_CONFIG = {
 }
 
 def get_connection_string():
-    """Generate SQLAlchemy connection string"""
-    return f"postgresql://{DB_CONFIG['user']}:{DB_CONFIG['password']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
-
+    # Escape special characters in password
+    password = quote_plus(DB_CONFIG['password'])
+    return f"postgresql://{DB_CONFIG['user']}:{password}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
